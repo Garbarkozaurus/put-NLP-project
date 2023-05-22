@@ -10,11 +10,15 @@ from typing import Optional
 _ALPHABET = set([c for c in "abcdefghijklmnopqrstuvwxyz"])
 _RND_GENERATOR = default_rng()
 
-def noisify(text: str, prob: float = 0.3, *, seed: Optional[int] = None) -> str:
-    """Simplest noisifier. Randomizes each character in `text` with probability `prob`.
 
-    By default, the module uses its private `numpy.random.Generator` to guarantee
-    independent randomness. Reproducibility can be forced by setting a fixed `seed`."""
+def noisify(text: str, prob: float = 0.3, *, seed: Optional[int] = None) \
+        -> str:
+    """Simplest noisifier. Randomizes each character in `text` with
+    probability `prob`.
+
+    By default, the module uses its private `numpy.random.Generator` to
+    guarantee independent randomness. Reproducibility can be forced by setting
+    a fixed `seed`."""
 
     assert text.islower(), "only lowercase text is supported"
     rng: Generator = _RND_GENERATOR if seed is None else default_rng(seed)
