@@ -25,8 +25,8 @@ def noisify(text: str, prob: float = 0.3, *, seed: Optional[int] = None) \
 
     result: list[str] = []
     for c in text:
-        if rng.random() < prob:
-            c_new = rng.choice(list(_ALPHABET - set((c,))), 1)[0]
+        if rng.random() < prob and c != ' ':
+            c_new = rng.choice(list(_ALPHABET - set((c, ' '))), 1)[0]
             result.append(c_new)
             continue
         result.append(c)
