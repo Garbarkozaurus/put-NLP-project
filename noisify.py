@@ -1,6 +1,8 @@
-# This is a small module for adding noise to text samples. It can be used to
-# "noisify" any string written in english, to then try to revert this process
-# with some NLP model.
+"""
+This is a small module for adding noise to text samples. It can be used to
+"noisify" any string written in english, to then try to revert this process
+with some NLP model.
+"""
 
 from numpy.random import Generator, default_rng
 from typing import Optional
