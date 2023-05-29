@@ -102,8 +102,15 @@ def apply_BERT_to_context(model: BertForMaskedLM, tokenizer: BertTokenizer,
 def best_word_from_list(target_word: str, word_conf_list:
                         list[tuple[str, float]], func: Callable =
                         levenshtein) -> str:
-    """Return the word with minimum distance (as determined by `func`) to
-    `target_word` from `words_list` and its distance"""
+    """Find the word that is the most similar to `target_word` among a list
+    of BERT's suggestions
+    :param list[tuple[str, float]] word_conf_list: list of (word, confidence)
+     pairs - outputs of BERT which were supposed to replace the
+    (masked to BERT) `target_word`
+    :param Callable func: distance metric used to compare the suggestions with
+    `target_word`. In case of a tie - the suggestion BERT is more confident
+    in is selected.
+    """
     min_dist = 1000
     max_conf = 0.0
     best_word = ""
