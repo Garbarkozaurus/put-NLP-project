@@ -105,7 +105,7 @@ def best_word_from_list(target_word: str, word_conf_list:
     """Return the word with minimum distance (as determined by `func`) to
     `target_word` from `words_list` and its distance"""
     min_dist = 1000
-    max_conf = 0
+    max_conf = 0.0
     best_word = ""
     for word, conf in word_conf_list:
         dist = func(target_word, word)
