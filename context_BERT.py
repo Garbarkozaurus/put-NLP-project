@@ -4,6 +4,8 @@ import torch
 from enchant.tokenize import get_tokenizer
 from enchant.checker import SpellChecker
 from noisify import noisify
+from enchant.utils import levenshtein
+from typing import Callable
 
 
 def enchanted_words(file_path: str) -> list[str]:
@@ -95,6 +97,23 @@ def apply_BERT_to_context(model: BertForMaskedLM, tokenizer: BertTokenizer,
     top_k_indices = top_k.indices[0]
     top_k_words = [tokenizer.decode([idx]) for idx in top_k_indices]
     return list(zip(top_k_words, top_k_values))
+
+
+def best_word_from_list(target_word: str, word_conf_list:
+                        list[tuple[str, float]], func: Callable =
+                        levenshtein) -> str:
+    """Return the word with minimum distance (as determined by `func`) to
+    `target_word` from `words_list` and its distance"""
+    min_dist = 1000
+    max_conf = 0
+    best_word = ""
+    for word, conf in word_conf_list:
+        dist = func(target_word, word)
+        if dist <= min_dist and conf > max_conf:
+            min_dist = dist
+            max_conf = conf
+            best_word = word
+    return best_word
 
 
 if __name__ == "__main__":
