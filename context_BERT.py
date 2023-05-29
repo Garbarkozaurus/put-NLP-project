@@ -86,7 +86,7 @@ def apply_BERT_to_context(model: BertForMaskedLM, tokenizer: BertTokenizer,
     context_end_idx = min(mask_index+context_after+1, len(masked_words)-1)
     masked_text = " ".join(masked_words[context_start_idx:context_end_idx])
     if print_context:
-        print(masked_text, "mask idx:", mask_index-context_start_idx)
+        print(masked_text, "||", mask_index-context_start_idx)
     model_input = tokenizer.encode_plus(masked_text, return_tensors="pt")
     model_output = model(**model_input)
     logits = model_output.logits
