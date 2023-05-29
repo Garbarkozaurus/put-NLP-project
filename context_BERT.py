@@ -76,9 +76,9 @@ def apply_BERT_to_context(model: BertForMaskedLM, tokenizer: BertTokenizer,
     within `masked_words`
     :param int context_before: at most how many tokens before the main mask
     should be used as context for the prediction
-    :param int context_before: at most how many tokens after the main mask
+    :param int context_after: at most how many tokens after the main mask
     should be used as context for the prediction
-    :param int k - how many of the most likely predictions should be returned
+    :param int k: how many of the most likely predictions should be returned
     """
     context_start_idx = max(mask_index-context_before, 0)
     context_end_idx = min(mask_index+context_after+1, len(masked_words)-1)
