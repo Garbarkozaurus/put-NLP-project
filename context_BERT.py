@@ -117,6 +117,8 @@ def best_word_from_list(target_word: str, word_conf_list:
 
 
 if __name__ == "__main__":
+    CONTEXT_BEFORE = 100
+    CONTEXT_AFTER = 100
     clean_words, noisy_words = clean_and_noisy_lists("pastas.txt")
     mask_idxs = masked_indices(noisy_words)
     masked_words = [mask_word(w) for w in noisy_words]
@@ -124,8 +126,20 @@ if __name__ == "__main__":
                                             return_dict=True)
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     for mask_idx in mask_idxs:
+        context_start_idx = max(mask_idx-CONTEXT_BEFORE, 0)
+        context_end_idx = min(mask_idx+CONTEXT_AFTER+1, len(masked_words)-1)
         BERT_predictions = apply_BERT_to_context(model, tokenizer,
-                                                 masked_words, mask_idx,
-                                                 print_context=True)
-        for token, value in BERT_predictions:
-            print(token, value)
+                            masked_words, mask_idx, CONTEXT_BEFORE,
+                            CONTEXT_AFTER, 200)
+        target_word = clean_words[mask_idx]
+        top_suggestion = best_word_from_list(target_word, BERT_predictions)
+        clean_context = " ".join(clean_words[context_start_idx:context_end_idx])
+        masked_context_list = masked_words[context_start_idx:context_end_idx]
+        noisy_context_list = noisy_words[context_start_idx:context_end_idx]
+        noisy_context_words = " ".join(noisy_context_list)
+        masked_context_list[mask_idx-context_start_idx] = '>'+top_suggestion+'<'
+        noisy_with_suggestion = " ".join(masked_context_list)
+        print(f"CLEAN CONTEXT: {clean_context}")
+        print(f"NOISY CONTEXT: {noisy_context_words}")
+        print(f"RESTORED: {noisy_with_suggestion}")
+        print()
