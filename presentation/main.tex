@@ -1,0 +1,31 @@
+\documentclass{beamer}
+\usetheme{Copenhagen}
+
+% Basic packages
+\usepackage{subfiles}
+\usepackage[quiet]{fontspec}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{fancyhdr, lastpage}
+\usepackage{multirow, multicol}
+\usepackage{longtable}
+\usepackage{siunitx}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+% Hyperref config
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=white}
+\urlstyle{same}
+
+\title{Denoising text with pyenchant and Bert}
+\subtitle{spell correction for robotic monkeys}
+\author{Marcin Gólski \and Piotr Kaszubski \and Bartłomiej Woroch}
+\institute{Poznań University of Technology}
+\date{Monday, May 29, 2023}
+
+\begin{document}
+\maketitle
+
+\subfile{sections/introduction.tex}
+\end{document}

@@ -1,0 +1,13 @@
+digraph {
+	rankdir=TB;
+	Input [label=<<b>NOISY TEXT</b><br/>"wteamef hams"> shape=plaintext];
+	pyEnchant [label=<<b>PYENCHANT</b>> shape=box];
+	Masked [label=<<b>MASKED TEXT</b><br/>"[MASK] hams"> shape=plaintext];
+	BERT [label=<<b>BERT</b>> shape=box];
+	Suggestions [label=<<b>SUGGESTIONS</b><br/>["greasy", "steamed"]> shape=plaintext];
+	DistMatrix [label=<<b>DISTANCE METRIC</b><br/>choose most similar suggestion> shape=plaintext];
+	Output [label=<<b>CLEAN OUTPUT</b><br/>"steamed hams"> shape=plaintext];
+
+	Input -> pyEnchant -> Masked -> BERT -> Suggestions -> DistMatrix -> Output;
+	Input -> DistMatrix;
+}

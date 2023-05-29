@@ -1,0 +1,11 @@
+digraph {
+	rankdir=TB;
+	Input [label=<<b>USER INPUT</b><br/>e.g. "steamed hams"> shape=plaintext];
+	Audio [label=<<b>TYPING AUDIO</b><br/>*.wav> shape=plaintext];
+	Model [label=<<b>MAIN MODEL</b>> shape=box];
+	Prediction [label=<<b>NOISY TEXT</b><br/>e.g. "wteamef hams"> shape=plaintext];
+	NLP [label=<<b>NLP MODEL</b>> shape=box color=red fontcolor=red];
+	Output [label=<<b>CLEAN OUTPUT</b><br/>ideally "steamed hams"> shape=plaintext];
+	
+	Input -> Audio -> Model -> Prediction -> NLP -> Output;
+}
