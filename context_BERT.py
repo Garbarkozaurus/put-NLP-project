@@ -83,8 +83,8 @@ def apply_BERT_to_context(model: BertForMaskedLM, tokenizer: BertTokenizer,
     :param int k: how many of the most likely predictions should be returned
     """
     context_start_idx = max(mask_index-context_before, 0)
-    context_end_idx = min(mask_index+context_after+1, len(masked_words)-1)
-    masked_text = " ".join(masked_words[context_start_idx:context_end_idx])
+    context_end_idx = min(mask_index+context_after, len(masked_words)-1)
+    masked_text = " ".join(masked_words[context_start_idx:context_end_idx+1])
     if print_context:
         print(masked_text, "||", mask_index-context_start_idx)
     model_input = tokenizer.encode_plus(masked_text, return_tensors="pt")
@@ -116,7 +116,7 @@ def best_word_from_list(target_word: str, word_conf_list:
     best_word = ""
     for word, conf in word_conf_list:
         dist = func(target_word, word)
-        if dist <= min_dist and conf > max_conf:
+        if dist < min_dist or (dist == min_dist and conf > max_conf):
             min_dist = dist
             max_conf = conf
             best_word = word
@@ -141,13 +141,13 @@ def present_results(mask_idx: int, word_conf_list: list[tuple[str, float]],
     # properly around the edges of the input
     # they also make everything way more readable
     context_start_idx = max(mask_idx-context_before, 0)
-    context_end_idx = min(mask_idx+context_after+1, len(masked_words)-1)
+    context_end_idx = min(mask_idx+context_after, len(masked_words)-1)
     target_word = clean_words[mask_idx]
     top_suggestion = best_word_from_list(target_word, word_conf_list)
 
-    clean_context = " ".join(clean_words[context_start_idx:context_end_idx])
-    masked_context_list = masked_words[context_start_idx:context_end_idx]
-    noisy_context_list = noisy_words[context_start_idx:context_end_idx]
+    clean_context = " ".join(clean_words[context_start_idx:context_end_idx+1])
+    masked_context_list = masked_words[context_start_idx:context_end_idx+1]
+    noisy_context_list = noisy_words[context_start_idx:context_end_idx+1]
     noisy_context_words = " ".join(noisy_context_list)
     masked_context_list[mask_idx-context_start_idx] = '>'+top_suggestion+'<'
     noisy_with_suggestion = " ".join(masked_context_list)
