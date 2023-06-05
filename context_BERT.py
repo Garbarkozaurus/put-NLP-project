@@ -5,7 +5,7 @@ from enchant.tokenize import get_tokenizer
 from enchant.checker import SpellChecker
 from noisify import noisify
 from enchant.utils import levenshtein
-from typing import Callable
+from typing import Callable, Optional
 
 
 def enchanted_words(file_path: str) -> list[str]:
@@ -46,8 +46,9 @@ def masked_indices(word_list: list[str], spell_checker: SpellChecker =
     return indices
 
 
-def clean_and_noisy_lists(file_path: str, random_char_prob: float = 0.05) -> \
-                          tuple[list[str], list[str]]:
+def clean_and_noisy_lists(file_path: str, random_char_prob: float = 0.05,
+                          noise_seed: Optional[int] = None
+                          ) -> tuple[list[str], list[str]]:
     """Given path to a file, return two lists of words:
       - list of words contained in the file on `file_path`, tokenized using
         `enchanted_words()`
@@ -55,7 +56,8 @@ def clean_and_noisy_lists(file_path: str, random_char_prob: float = 0.05) -> \
        letter by `noisify()` with probability `random_char_prob`
     """
     words_from_file = enchanted_words(file_path)
-    noisy_text = noisify(" ".join(words_from_file).lower(), random_char_prob)
+    noisy_text = noisify(" ".join(words_from_file).lower(), random_char_prob,
+                         seed=noise_seed)
     # no need to use enchant here - it might get thrown off by weird, randomly
     # generated words and noisifer can't mess with spaces, so this ensures
     # that the lists represent corresponding words
