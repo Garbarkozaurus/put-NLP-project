@@ -240,12 +240,13 @@ if __name__ == "__main__":
     clean_words, noisy_words = clean_and_noisy_lists(argv[1])
     mask_idxs = masked_indices(noisy_words)
     masked_words = [mask_word(w) for w in noisy_words]
-    model = BertForMaskedLM.from_pretrained('bert-large-uncased',
+    model = BertForMaskedLM.from_pretrained('bert-base-uncased',
                                             return_dict=True)
-    tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     win_predictions = []
     for i, mask_idx in enumerate(mask_idxs):
-        print(f"\rpredicting mask {i}/{len(mask_idxs)} ({i / len(mask_idxs) * 100:.2f}%) ... ", end="", file=stderr)
+        print(f"\rpredicting mask {i}/{len(mask_idxs)}" +
+              f"({i / len(mask_idxs) * 100:.2f}%) ... ", end="", file=stderr)
         BERT_predictions = apply_BERT_to_context(model, tokenizer,
                                                  masked_words, mask_idx,
                                                  CONTEXT_BEFORE,
