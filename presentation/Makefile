@@ -3,19 +3,23 @@
 
 CACHEDIR = cache
 GVDIR = graphviz
+PYPLOTDIR = pyplot
 LATEX = xelatex
 JOBNAME = presentation
 LXFLAGS = -interaction batchmode -8bit -shell-escape -output-directory "$(CACHEDIR)" -jobname $(JOBNAME)
 
-.PHONY: directories all graphviz main clean
+.PHONY: directories all graphviz pyplot main clean
 
-all: directories graphviz main
+all: directories graphviz pyplot main
 
 directories:
 	mkdir -p -- $(CACHEDIR)
 
 graphviz:
 	$(MAKE) -C $(GVDIR)
+
+pyplot:
+	$(MAKE) -C $(PYPLOTDIR)
 
 main: main.tex
 	@echo Starting build...
