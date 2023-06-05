@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from transformers import BertTokenizer, BertForMaskedLM
 from torch.nn import functional as F
 import torch
@@ -6,6 +8,7 @@ from enchant.checker import SpellChecker
 from noisify import noisify
 from enchant.utils import levenshtein
 from typing import Callable, Optional
+from sys import argv, stderr
 
 
 def enchanted_words(file_path: str) -> list[str]:
@@ -233,14 +236,16 @@ if __name__ == "__main__":
     CONTEXT_BEFORE = 100
     CONTEXT_AFTER = 100
     TOP_K = 200
-    clean_words, noisy_words = clean_and_noisy_lists("101-convos.txt")
+    assert len(argv) == 2, "Exactly 1 argument expected (path to text corpus)"
+    clean_words, noisy_words = clean_and_noisy_lists(argv[1])
     mask_idxs = masked_indices(noisy_words)
     masked_words = [mask_word(w) for w in noisy_words]
-    model = BertForMaskedLM.from_pretrained('bert-base-uncased',
+    model = BertForMaskedLM.from_pretrained('bert-large-uncased',
                                             return_dict=True)
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
     win_predictions = []
-    for mask_idx in mask_idxs:
+    for i, mask_idx in enumerate(mask_idxs):
+        print(f"\rpredicting mask {i}/{len(mask_idxs)} ({i / len(mask_idxs) * 100:.2f}%) ... ", end="", file=stderr)
         BERT_predictions = apply_BERT_to_context(model, tokenizer,
                                                  masked_words, mask_idx,
                                                  CONTEXT_BEFORE,
@@ -250,6 +255,7 @@ if __name__ == "__main__":
         # present_results(mask_idx, BERT_predictions, clean_words, noisy_words,
                         # CONTEXT_BEFORE, CONTEXT_AFTER)
         # print()
+    print("done.", file=stderr)
 
     seq_restored_words = apply_sequential_BERT(model, tokenizer, noisy_words,
                                                masked_words, mask_idxs,
