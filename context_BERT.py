@@ -133,10 +133,9 @@ def apply_sequential_BERT(model: BertForMaskedLM, tokenizer: BertTokenizer,
     """
     restored_words = masked_words[:]
     for i, mask_index in enumerate(mask_indices):
-        previous_mask = 0 if i == 0 else mask_indices[i-1]
         next_mask = len(masked_words)-1 if i == len(mask_indices)-1 else \
             mask_indices[i+1]
-        c_before = min(mask_index-previous_mask-1, context_before)
+        c_before = context_before
         c_after = min(next_mask-mask_index-1, context_after)
         predictions = apply_BERT_to_context(model, tokenizer, restored_words,
                                             mask_index, c_before, c_after,
