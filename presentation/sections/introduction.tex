@@ -39,4 +39,48 @@
 	\end{figure}
 \end{frame}
 
+\begin{frame}[fragile]
+	\frametitle{Hyperparameters and practical aspects}
+	\begin{itemize}
+	\item
+	CONTEXT\_BEFORE, CONTEXT\_AFTER: how many tokens before/after the masked
+	one BERT has access to. In experiments both set to 100
+	\item
+	TOP\_K: how many of BERT's top suggestions are searched through to find
+	the closest word. Set to 200
+	\item
+	prob: probability to change a letter to a different random letter
+	(adding artificial noise). Set to 0.05
+	\end{itemize}
+
+	\begingroup
+	\fontsize{8pt}{12pt}\selectfont
+	\begin{verbatim}
+		BERT_predictions = apply_BERT_to_context(model, tokenizer,
+		                                         masked_words, mask_idx,
+		                                         CONTEXT_BEFORE,
+		                                         CONTEXT_AFTER, TOP_K)
+		prediction = best_word_from_list(noisy_words[mask_idx], BERT_predictions)
+	\end{verbatim}
+	\endgroup
+\end{frame}
+
+\begin{frame}
+	\frametitle{Attempted approaches}
+	BERT - obvious tool for the job. Established model, trained on filling masked text
+	\begin{itemize}
+	\item
+	Context approach: fill a mask based on a fixed number of neighbouring tokens.
+	They can include other masks, which are left as is
+	\item
+	Mask-delimited approach:  context limited to the previous/next mask,
+	independently in each direction, if it was found within set limit
+	(almost always happened: $\sim18\%$ of the words were masked)
+	\item
+	Sequential approach: walks through entire input sequentially; later masks
+	utilise suggestions for previous ones, forward context still limited to
+	the next mask
+	\end{itemize}
+\end{frame}
+
 \end{document}

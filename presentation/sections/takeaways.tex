@@ -1,0 +1,27 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+
+\begin{frame}[fragile]
+	\frametitle{Takeaways and future work}
+	\begin{itemize}
+	\item
+	% would love to do \verb|bert-base|, \verb|bert-large|, but `make` fails
+	Bigger is usually better, but often not worth the marginal improvement:
+	\verb|bert-large| offered an improvement of around 1 percentage point over
+	\verb|bert-base|. Number of parameters: 340M vs.\ 110M
+	\item
+	...but bigger can be worse: making context size smaller helped to produce
+	more specific responses
+	\item
+	a 95\% character recognition rate can make the words they occur in
+	impossible for HUMANS to decipher, even with context
+	\end{itemize}
+
+	Potential improvements: enforce some constraints on selected words (matching
+	length, matching characters); use a different token-based model, perhaps with only
+	one side of the context; try a character based-model
+\end{frame}
+
+\end{document}
