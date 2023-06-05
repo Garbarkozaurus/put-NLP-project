@@ -253,7 +253,7 @@ if __name__ == "__main__":
         pred = best_word_from_list(noisy_words[mask_idx], BERT_predictions)
         win_predictions.append(pred)
         # present_results(mask_idx, BERT_predictions, clean_words, noisy_words,
-                        # CONTEXT_BEFORE, CONTEXT_AFTER)
+        #                 CONTEXT_BEFORE, CONTEXT_AFTER)
         # print()
     print("done.", file=stderr)
 
@@ -267,7 +267,7 @@ if __name__ == "__main__":
     print("CLEAN, NOISY, WINDOW, SEQUENTIAL")
     for i, id in enumerate(mask_idxs):
         print(clean_words[id], noisy_words[id], win_predictions[i],
-            seq_restored_words[id])
+              seq_restored_words[id])
         targets.append(clean_words[id])
         seq_predictions.append(seq_restored_words[id])
         noisy.append(noisy_words[id])
